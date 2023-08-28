@@ -1,2 +1,8 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+	import Form from '$lib/Form.svelte';
+</script>
+
+<div class="flex flex-col justify-center items-center gap-4">
+	<h1 class="text-2xl text-primary-content m-4">Enter an Arabic Word to Get its Stem!</h1>
+	<Form />
+</div>
