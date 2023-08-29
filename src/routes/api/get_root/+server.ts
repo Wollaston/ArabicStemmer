@@ -5,32 +5,34 @@ import { json } from '@sveltejs/kit';
 export const POST: RequestHandler = async ({ request }) => {
 	const data = await request.formData();
 	const word = data.get('word')?.toString();
-	let word_root = '';
 	if (word) {
 		const child = spawn('python3', ['src/lib/server/root.py', word]);
-		child.stdout.on('data', (data: string) => {
-			console.log(`stdout:\n${data}`);
-			word_root = data.toString();
+
+		let data = '';
+		for await (const chunk of child.stdout) {
+			console.log('stdout chunk: ' + chunk);
+			data += chunk;
+		}
+		let error = '';
+		for await (const chunk of child.stderr) {
+			console.error('stderr chunk: ' + chunk);
+			error += chunk;
+		}
+		const exitCode = await new Promise((resolve) => {
+			child.on('close', resolve);
 		});
 
-		child.stderr.on('data', (data: string) => {
-			console.error(`stderr: ${data}`);
+		if (exitCode) {
+			throw new Error(`subprocess error exit ${exitCode}, ${error}`);
+		}
+		return json({
+			word_root: data
 		});
-
-		child.on('error', (error: string) => {
-			console.error(`error: ${error}`);
-		});
-
-		child.on('close', (code: string) => {
-			console.log(`child process exited with code ${code}`);
-			console.log('Child Process:', word_root);
+	} else {
+		return json({
+			word_root: 'ERROR'
 		});
 	}
-	const sleep = (ms: number | undefined) => new Promise((r) => setTimeout(r, ms));
-	await sleep(1000);
-	return json({
-		word_root: word_root
-	});
 };
 
 export const GET: RequestHandler = () => {
