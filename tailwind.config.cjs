@@ -7,7 +7,7 @@ const config = {
 	},
 
 	daisyui: {
-		themes: ['garden']
+		themes: ['emerald']
 	},
 
 	plugins: [require('@tailwindcss/forms'), require('daisyui')]
