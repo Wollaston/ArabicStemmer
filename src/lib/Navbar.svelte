@@ -8,7 +8,9 @@
 	</div>
 	<div class="flex-none">
 		<ul class="menu menu-horizontal px-1">
-			<li><a href="{base}/about">About</a></li>
+			<li>
+				<a href="https://github.com/Wollaston/ArabicStemmer/blob/main/README.md">About</a>
+			</li>
 		</ul>
 	</div>
 </div>

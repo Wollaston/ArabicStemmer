@@ -1,6 +1,5 @@
 import sys
 import json
-from jsonschema import validate
 from nltk.stem.isri import ISRIStemmer
 from nltk.stem.arlstem import ARLSTem
 from nltk.stem.arlstem2 import ARLSTem2
@@ -24,18 +23,6 @@ arl2_stem = ARLSTem2.stem(base_word)
 arl2_success = False
 if len(arl2_stem) == 3:
     arl2_success = True
-
-schema = {
-    "type": "object",
-    "properties": {
-        "isri_stem": {"type": "string"},
-        "isri_success": {"type": "string"},
-        "arl_stem": {"type": "string"},
-        "arl_success": {"type": "string"},
-        "arl2_stem": {"type": "string"},
-        "arl2_success": {"type": "string"},
-    },
-}
 
 data = {
     "isri_stem": isri_stem,
