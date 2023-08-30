@@ -3,8 +3,8 @@ import type { RequestHandler } from './$types';
 import { json } from '@sveltejs/kit';
 
 export const POST: RequestHandler = async ({ request }) => {
-	const data = await request.formData();
-	const word = data.get('word')?.toString();
+	const formData = await request.formData();
+	const word = formData.get('word')?.toString();
 	if (word) {
 		const child = spawn('python3', ['src/lib/server/root.py', word]);
 
@@ -25,17 +25,10 @@ export const POST: RequestHandler = async ({ request }) => {
 		if (exitCode) {
 			throw new Error(`subprocess error exit ${exitCode}, ${error}`);
 		}
-		return json({
-			word_root: data
-		});
+		return json(data);
 	} else {
 		return json({
-			word_root: 'ERROR'
+			data: 'Error'
 		});
 	}
-};
-
-export const GET: RequestHandler = () => {
-	console.log('GET Request');
-	return new Response('Get Request');
 };

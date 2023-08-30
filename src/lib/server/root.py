@@ -1,14 +1,52 @@
 import sys
-from nltk.stem.isri import *
+import json
+from jsonschema import validate
+from nltk.stem.isri import ISRIStemmer
+from nltk.stem.arlstem import ARLSTem
+from nltk.stem.arlstem2 import ARLSTem2
 
+base_word = sys.argv[1]
 
-stemmer = ISRIStemmer()
-message = sys.argv[1]
-message = stemmer.stem(message)
-if len(message) == 3:
-    letters = [*message]
-    for letter in letters:
-        print(letter)
-else:
-    print("Please double check that you entered a valid Arabic Word")
+ISRIStemmer = ISRIStemmer()
+isri_stem = ISRIStemmer.stem(base_word)
+isri_success = False
+if len(isri_stem) == 3:
+    isri_success = True
+
+ARLSTem = ARLSTem()
+arl_stem = ARLSTem.stem(base_word)
+arl_success = False
+if len(arl_stem) == 3:
+    arl_success = True
+
+ARLSTem2 = ARLSTem2()
+arl2_stem = ARLSTem2.stem(base_word)
+arl2_success = False
+if len(arl2_stem) == 3:
+    arl2_success = True
+
+schema = {
+    "type": "object",
+    "properties": {
+        "isri_stem": {"type": "string"},
+        "isri_success": {"type": "string"},
+        "arl_stem": {"type": "string"},
+        "arl_success": {"type": "string"},
+        "arl2_stem": {"type": "string"},
+        "arl2_success": {"type": "string"},
+    },
+}
+
+data = {
+    "isri_stem": isri_stem,
+    "isri_success": isri_success,
+    "arl_stem": arl_stem,
+    "arl_success": arl_success,
+    "arl2_stem": arl2_stem,
+    "arl2_success": arl2_success,
+}
+
+json_data = json.dumps(data, ensure_ascii=False)
+
+print(json_data)
 sys.stdout.flush()
